@@ -1,5 +1,3 @@
-import 'package:assignment_1/assignment_1.dart' as assignment_1;
-
 void main() {
   int score = 84;
   String grade;
