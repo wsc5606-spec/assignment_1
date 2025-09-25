@@ -7,21 +7,24 @@ void main() {
   print('=====================');
 
   // 1. 자동 생성 또는 직접 입력 선택
-  print('1. 자동 생성  2. 직접 입력');
-  String? choice = stdin.readLineSync();
+  String choice = '';
+  while (choice != '1' && choice != '2') {
+    stdout.write('1. 자동 생성  2. 직접 입력: ');
+    choice = stdin.readLineSync() ?? '';
+    if (choice != '1' && choice != '2') {
+      print('잘못된 선택입니다. 다시 입력하세요.');
+    }
+  }
 
   List<int> lottoNumbers = [];
 
   if (choice == '1') {
     lottoNumbers = generateLottoNumbers();
+    print('\n[자동 생성] 발급한 로또 번호 : $lottoNumbers');
   } else if (choice == '2') {
     lottoNumbers = inputLottoNumbers();
-  } else {
-    print('잘못된 선택입니다. 자동으로 생성합니다.');
-    lottoNumbers = generateLottoNumbers();
+    print('\n[직접 입력] 발급한 로또 번호 : $lottoNumbers');
   }
-
-  print('\n발급한 로또 번호 : $lottoNumbers');
 
   // 2. 당첨 번호
   List<int> winningNumbers = [9, 19, 29, 35, 37, 38];
@@ -35,15 +38,13 @@ void main() {
   print('\n현재 발급한 로또 번호 : $lottoNumbers');
 }
 
-// --------------------
-// 랜덤 번호 생성
-// --------------------
+// 랜덤 번호 생성 (1~45, 6개, 중복 없음)
 List<int> generateLottoNumbers() {
   Random random = Random();
   List<int> numbers = [];
 
   while (numbers.length < 6) {
-    int num = random.nextInt(45) + 1; // 1~45
+    int num = random.nextInt(45) + 1;
     if (!numbers.contains(num)) {
       numbers.add(num);
     }
@@ -53,9 +54,7 @@ List<int> generateLottoNumbers() {
   return numbers;
 }
 
-// --------------------
-// 사용자 입력
-// --------------------
+// 사용자 직접 입력 (1~45, 6개, 중복 없음)
 List<int> inputLottoNumbers() {
   List<int> numbers = [];
   print('1~45 사이의 숫자 6개를 입력하세요 (중복 불가)');
@@ -71,6 +70,7 @@ List<int> inputLottoNumbers() {
       print('1~45 사이의 숫자만 입력 가능합니다.');
       continue;
     }
+
     if (numbers.contains(num)) {
       print('이미 입력한 숫자입니다. 다른 숫자를 입력하세요.');
       continue;
@@ -83,9 +83,7 @@ List<int> inputLottoNumbers() {
   return numbers;
 }
 
-// --------------------
 // 당첨 확인
-// --------------------
 void checkWinning(List<int> lotto, List<int> winning) {
   int matchCount = lotto.where((num) => winning.contains(num)).length;
 
@@ -100,6 +98,6 @@ void checkWinning(List<int> lotto, List<int> winning) {
     result = '당첨 실패!';
   }
 
-  print('당첨 개수: $matchCount');
-  print('당첨 여부 : $result');
+  print('맞춘 개수: $matchCount');
+  print('당첨 여부: $result');
 }
